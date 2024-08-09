@@ -1,10 +1,11 @@
+import { getDictionary } from "@/app/dictionaries";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-export default async function AuthButton({lng}: {lng:string}) {
+export default async function AuthButton({ lng }: { lng: string }) {
   const supabase = createClient();
-
+  const dict = await getDictionary(lng);
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -21,7 +22,7 @@ export default async function AuthButton({lng}: {lng:string}) {
     <div className="flex items-center">
       <form action={signOut}>
         <button className="bg-btn-background hover:bg-btn-background-hover">
-          Logout
+          {dict.navbar.logout}
         </button>
       </form>
     </div>
@@ -30,7 +31,7 @@ export default async function AuthButton({lng}: {lng:string}) {
       href={`/${lng}/login`}
       className="py-2 px-3 flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover"
     >
-      Login
+      {dict.navbar.login}
     </Link>
   );
 }

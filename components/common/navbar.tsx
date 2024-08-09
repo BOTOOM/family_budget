@@ -31,20 +31,22 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SettingsIcon } from "../icons/settings";
 import { BarChartIcon } from "../icons/bar-char";
-import { UsersIcon } from "../icons/user";
 import { HomeIcon } from "../icons/home";
 import { DollarSignIcon } from "../icons/dollar";
 import { MenuIcon } from "../icons/menu";
-import { SearchIcon } from "lucide-react";
+import { SearchIcon, Wallet } from "lucide-react";
 import AuthButton from "../AuthButton";
+import { getDictionary } from "@/app/dictionaries";
 
-export default function NavBar({
+export default async function NavBar({
   children, // will be a page or nested layout
   lng,
 }: {
   children: React.ReactNode;
   lng: string;
 }) {
+  const dict = await getDictionary(lng);
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
@@ -56,7 +58,7 @@ export default function NavBar({
               prefetch={false}
             >
               <DollarSignIcon className="h-4 w-4 transition-all group-hover:scale-110" />
-              <span className="sr-only">Remittance Monitoring</span>
+              <span className="sr-only">Family Budget</span>
             </Link>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -66,10 +68,10 @@ export default function NavBar({
                   prefetch={false}
                 >
                   <HomeIcon className="h-5 w-5" />
-                  <span className="sr-only">Shipments</span>
+                  <span className="sr-only">{dict.navbar.dashboard}</span>
                 </Link>
               </TooltipTrigger>
-              <TooltipContent side="right">Shipments</TooltipContent>
+              <TooltipContent side="right">{dict.navbar.dashboard}</TooltipContent>
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -78,38 +80,13 @@ export default function NavBar({
                   className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
                   prefetch={false}
                 >
-                  <UsersIcon className="h-5 w-5" />
-                  <span className="sr-only">Customers</span>
+                  <Wallet className="h-5 w-5" />
+                  <span className="sr-only">{dict.navbar.accounts}</span>
                 </Link>
               </TooltipTrigger>
-              <TooltipContent side="right">Customers</TooltipContent>
+              <TooltipContent side="right">{dict.navbar.accounts}</TooltipContent>
             </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href="#"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-                  prefetch={false}
-                >
-                  <BarChartIcon className="h-5 w-5" />
-                  <span className="sr-only">Analytics</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Analytics</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href="#"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-                  prefetch={false}
-                >
-                  <SettingsIcon className="h-5 w-5" />
-                  <span className="sr-only">Settings</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Settings</TooltipContent>
-            </Tooltip>
+            
           </TooltipProvider>
         </nav>
       </aside>
@@ -119,7 +96,7 @@ export default function NavBar({
             <SheetTrigger asChild>
               <Button size="icon" variant="outline" className="sm:hidden">
                 <MenuIcon className="h-5 w-5" />
-                <span className="sr-only">Toggle Menu</span>
+                <span className="sr-only">Menu</span>
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="sm:max-w-xs">
@@ -130,7 +107,7 @@ export default function NavBar({
                   prefetch={false}
                 >
                   <DollarSignIcon className="h-5 w-5 transition-all group-hover:scale-110" />
-                  <span className="sr-only">Remittance Monitoring</span>
+                  <span className="sr-only">Family Budget</span>
                 </Link>
 
                 <Link
@@ -139,32 +116,17 @@ export default function NavBar({
                   prefetch={false}
                 >
                   <HomeIcon className="h-5 w-5" />
-                  Shipments
+                  {dict.navbar.dashboard}
                 </Link>
                 <Link
                   href="#"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                   prefetch={false}
                 >
-                  <UsersIcon className="h-5 w-5" />
-                  Customers
+                  <Wallet className="h-5 w-5" />
+                  {dict.navbar.accounts}
                 </Link>
-                <Link
-                  href="#"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                  prefetch={false}
-                >
-                  <BarChartIcon className="h-5 w-5" />
-                  Analytics
-                </Link>
-                <Link
-                  href="#"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                  prefetch={false}
-                >
-                  <SettingsIcon className="h-5 w-5" />
-                  Settings
-                </Link>
+                
               </nav>
             </SheetContent>
           </Sheet>
@@ -172,22 +134,22 @@ export default function NavBar({
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <Link href="#" prefetch={false}>
-                    Dashboard
+                  <Link href={`${lng}/dashboard`} prefetch={false}>
+                    {dict.navbar.dashboard}
                   </Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
-              <BreadcrumbSeparator />
+              {/* <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <BreadcrumbPage>Remittance Monitoring</BreadcrumbPage>
-              </BreadcrumbItem>
+              </BreadcrumbItem> */}
             </BreadcrumbList>
           </Breadcrumb>
           <div className="relative ml-auto flex-1 md:grow-0">
             <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Search..."
+              placeholder={dict.navbar.search}
               className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
             />
           </div>
@@ -209,10 +171,9 @@ export default function NavBar({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuLabel>{dict.navbar.my_account}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
+              <DropdownMenuItem>{dict.navbar.settings}</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <AuthButton lng={lng} />
