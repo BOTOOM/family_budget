@@ -26,10 +26,10 @@ export default async function Login({
     });
 
     if (error) {
-      return redirect("/login?message=Could not authenticate user");
+      return redirect(`/${lng}/login?message=Could not authenticate user`);
     }
 
-    return redirect("/dashboard");
+    return redirect(`/${lng}/dashboard`);
   };
 
   const signUp = async (formData: FormData) => {
