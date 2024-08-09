@@ -2,26 +2,49 @@
  * v0 by Vercel.
  * @see https://v0.dev/t/JRoBiirkjvF
  */
-import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
-import Link from "next/link"
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
-import { Button } from "@/components/ui/button"
-import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "@/components/ui/breadcrumb"
-import { Input } from "@/components/ui/input"
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem, DropdownMenuCheckboxItem } from "@/components/ui/dropdown-menu"
-import { SettingsIcon } from "../icons/settings"
-import { BarChartIcon } from "../icons/bar-char"
-import { UsersIcon } from "../icons/user"
-import { HomeIcon } from "../icons/home"
-import { DollarSignIcon } from "../icons/dollar"
-import { MenuIcon } from "../icons/menu"
-import { SearchIcon } from "lucide-react"
+import {
+  TooltipProvider,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
+import Link from "next/link";
+import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+  BreadcrumbPage,
+} from "@/components/ui/breadcrumb";
+import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+} from "@/components/ui/dropdown-menu";
+import { SettingsIcon } from "../icons/settings";
+import { BarChartIcon } from "../icons/bar-char";
+import { UsersIcon } from "../icons/user";
+import { HomeIcon } from "../icons/home";
+import { DollarSignIcon } from "../icons/dollar";
+import { MenuIcon } from "../icons/menu";
+import { SearchIcon } from "lucide-react";
+import AuthButton from "../AuthButton";
 
 export default function NavBar({
-    children, // will be a page or nested layout
-  }: {
-    children: React.ReactNode
-  }) {
+  children, // will be a page or nested layout
+  lng,
+}: {
+  children: React.ReactNode;
+  lng: string;
+}) {
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
@@ -109,8 +132,12 @@ export default function NavBar({
                   <DollarSignIcon className="h-5 w-5 transition-all group-hover:scale-110" />
                   <span className="sr-only">Remittance Monitoring</span>
                 </Link>
-                
-                <Link href="#" className="flex items-center gap-4 px-2.5 text-foreground" prefetch={false}>
+
+                <Link
+                  href="#"
+                  className="flex items-center gap-4 px-2.5 text-foreground"
+                  prefetch={false}
+                >
                   <HomeIcon className="h-5 w-5" />
                   Shipments
                 </Link>
@@ -166,7 +193,11 @@ export default function NavBar({
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
+              <Button
+                variant="outline"
+                size="icon"
+                className="overflow-hidden rounded-full"
+              >
                 <img
                   src="/placeholder.svg"
                   width={36}
@@ -183,43 +214,18 @@ export default function NavBar({
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem>
+                <AuthButton lng={lng} />
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
           <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
-          {children}
-            
+            {children}
           </div>
         </main>
       </div>
     </div>
-  )
+  );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
