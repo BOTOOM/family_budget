@@ -2,6 +2,21 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { i18nConfig } from '../../i18n/settings'
 import "./globals.css";
+import { Inter } from 'next/font/google'
+import { cn } from '@/lib/utils'
+
+
+const fontHeading = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-heading',
+})
+
+const fontBody = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-body',
+})
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -30,8 +45,16 @@ export default function RootLayout({
   }
 }) {
   return (
-    <html lang={lng} className={GeistSans.className}>
-      <body className="bg-neutral-50 text-black selection:bg-teal-300">
+    // <html lang={lng} className={GeistSans.className}>
+    <html lang={lng} >
+       <body 
+        className={cn(
+          'antialiased',
+          fontHeading.variable,
+          fontBody.variable
+        )}
+      > 
+      {/* className="bg-neutral-50 text-black selection:bg-teal-300" */}
         {/* <main className=""> */}
         <main className="min-h-screen flex flex-col items-center">
           {children}
