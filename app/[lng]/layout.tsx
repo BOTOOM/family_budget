@@ -1,22 +1,20 @@
 import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
-import { i18nConfig } from '../../i18n/settings'
+import { i18nConfig } from "../../i18n/settings";
 import "./globals.css";
-import { Inter } from 'next/font/google'
-import { cn } from '@/lib/utils'
-
+import { Inter } from "next/font/google";
+import { cn } from "@/lib/utils";
 
 const fontHeading = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-heading',
-})
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-heading",
+});
 
 const fontBody = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-body',
-})
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-body",
+});
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -28,33 +26,26 @@ export const metadata: Metadata = {
   description: "The fastest way to build apps with Next.js and Supabase",
 };
 
-
 export async function generateStaticParams() {
-  return i18nConfig.locales.map((lng) => ({ lng }))
+  return i18nConfig.locales.map((lng) => ({ lng }));
 }
 
 export default function RootLayout({
   children,
-  params: {
-    lng
-  }
+  params: { lng },
 }: {
   children: React.ReactNode;
   params: {
-    lng: string
-  }
+    lng: string;
+  };
 }) {
   return (
     // <html lang={lng} className={GeistSans.className}>
-    <html lang={lng} >
-       <body 
-        className={cn(
-          'antialiased',
-          fontHeading.variable,
-          fontBody.variable
-        )}
-      > 
-      {/* className="bg-neutral-50 text-black selection:bg-teal-300" */}
+    <html lang={lng}>
+      <body
+        className={cn("antialiased", fontHeading.variable, fontBody.variable)}
+      >
+        {/* className="bg-neutral-50 text-black selection:bg-teal-300" */}
         {/* <main className=""> */}
         <main className="min-h-screen flex flex-col items-center">
           {children}

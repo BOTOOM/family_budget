@@ -27,16 +27,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuItem,
-  DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
-import { SettingsIcon } from "../icons/settings";
-import { BarChartIcon } from "../icons/bar-char";
 import { HomeIcon } from "../icons/home";
 import { DollarSignIcon } from "../icons/dollar";
 import { MenuIcon } from "../icons/menu";
 import { SearchIcon, Wallet } from "lucide-react";
 import AuthButton from "../AuthButton";
 import { getDictionary } from "@/app/dictionaries";
+import { cn } from "@/lib/utils";
 
 export default async function NavBar({
   children, // will be a page or nested layout
@@ -63,8 +61,8 @@ export default async function NavBar({
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  href="#"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                  href={`/${lng}/dashboard`}
+                  className={cn("flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8",)}
                   prefetch={false}
                 >
                   <HomeIcon className="h-5 w-5" />
@@ -76,7 +74,7 @@ export default async function NavBar({
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  href="#"
+                  href={`/${lng}/accounts`}
                   className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
                   prefetch={false}
                 >
@@ -111,7 +109,7 @@ export default async function NavBar({
                 </Link>
 
                 <Link
-                  href="#"
+                  href={`/${lng}/dashboard`}
                   className="flex items-center gap-4 px-2.5 text-foreground"
                   prefetch={false}
                 >
@@ -119,7 +117,7 @@ export default async function NavBar({
                   {dict.navbar.dashboard}
                 </Link>
                 <Link
-                  href="#"
+                  href={`/${lng}/accounts`}
                   className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                   prefetch={false}
                 >
@@ -181,8 +179,8 @@ export default async function NavBar({
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
-        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
-          <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
+        <main className="">
+          <div className="">
             {children}
           </div>
         </main>
