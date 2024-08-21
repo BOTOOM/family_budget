@@ -12,7 +12,7 @@ export default async function AccountsPage({
 
   return (
     <div className=" flex items-center justify-center">
-      <AccountComponent/>
+      <AccountComponent lng={lng} />
     </div>
   );
 }

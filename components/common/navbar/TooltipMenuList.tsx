@@ -44,7 +44,7 @@ export default async function TooltipMenuList({ lng }: { lng: string }) {
               </Link>
             </TooltipTrigger>
             <TooltipContent side="right">
-              {dict.navbar.dashboard}
+              {route.i18n(dict)}
             </TooltipContent>
           </Tooltip>
         );
