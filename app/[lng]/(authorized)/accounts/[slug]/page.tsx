@@ -1,6 +1,6 @@
 import AccountDetailComponent from "@/components/accounts/detail/accountDetail";
 import AuthButton from "@/components/AuthButton";
-import { getBanks } from "@/services";
+import { getAccountTypes, getBanks, getCurrencies } from "@/services";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -20,11 +20,13 @@ export default async function AccountDetailPage({
     return redirect("/login");
   }
   const banks = await getBanks();
+  const accountTypes = await getAccountTypes();
+  const currencies = await getCurrencies();
 
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
       <Suspense>
-        <AccountDetailComponent banks={banks} />
+        <AccountDetailComponent banks={banks} accountTypes={accountTypes} currencies={currencies} />
         {/* <AccountDetailComponent banks={banks} /> */}
       </Suspense>
     </div>

@@ -38,13 +38,14 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Banks } from "@/services/types";
+import { Account, AccountTypes, Banks, Currencies } from "@/services/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { UpsertAccountAction } from "@/actions";
 
 const formSchema = z.object({
   currency: z.string(),
@@ -56,7 +57,15 @@ const formSchema = z.object({
   payment_date: z.date(),
   close_date: z.date(),
 });
-export default function AccountDetailComponent({ banks }: { banks: Banks[] }) {
+export default function AccountDetailComponent({
+  banks,
+  accountTypes,
+  currencies
+}: {
+  banks: Banks[];
+  accountTypes: AccountTypes[];
+  currencies: Currencies[];
+}) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -65,16 +74,30 @@ export default function AccountDetailComponent({ banks }: { banks: Banks[] }) {
       name: "",
       account_number: "",
       account_type: "",
-      close_date: undefined,
-      payment_date: undefined,
+      close_date: new Date(),
+      payment_date: new Date(),
       initial_balance: 0,
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const creditID = accountTypes.find((acctype) => acctype.tag === "credit")?.id;
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
+    const account: Account = {
+      account_number: values.account_number,
+      account_type_id: values.account_type,
+      bank_id: values.bank,
+      closing_date: values.close_date.toISOString(),
+      currency_id: values.currency,
+      current_balance: values.initial_balance,
+      initial_balance: values.initial_balance,
+      name: values.name,
+      payment_date: values.payment_date.toISOString(),
+    };
+    const response = await UpsertAccountAction(account);
   }
 
   return (
@@ -117,11 +140,13 @@ export default function AccountDetailComponent({ banks }: { banks: Banks[] }) {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="usd">USD</SelectItem>
-                          <SelectItem value="eur">EUR</SelectItem>
-                          <SelectItem value="gbp">GBP</SelectItem>
-                          <SelectItem value="cad">CAD</SelectItem>
-                          <SelectItem value="aud">AUD</SelectItem>
+                        {currencies.map((curr) => {
+                            return (
+                              <SelectItem key={curr.id} value={curr.id}>
+                                {curr.name}
+                              </SelectItem>
+                            );
+                          })}
                         </SelectContent>
                       </Select>
                     </FormItem>
@@ -175,10 +200,16 @@ export default function AccountDetailComponent({ banks }: { banks: Banks[] }) {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="checking">Checking</SelectItem>
-                          <SelectItem value="savings">Savings</SelectItem>
-                          <SelectItem value="business">Business</SelectItem>
-                          <SelectItem value="personal">Personal</SelectItem>
+                          {accountTypes.map((accountType) => {
+                            return (
+                              <SelectItem
+                                key={accountType.id}
+                                value={accountType.id}
+                              >
+                                {accountType.name}
+                              </SelectItem>
+                            );
+                          })}
                         </SelectContent>
                       </Select>
                     </FormItem>
@@ -201,6 +232,7 @@ export default function AccountDetailComponent({ banks }: { banks: Banks[] }) {
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -232,73 +264,96 @@ export default function AccountDetailComponent({ banks }: { banks: Banks[] }) {
                 placeholder="Enter initial balance"
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <FormField
-                  control={form.control}
-                  name="close_date"
-                  render={({ field }) => (
-                    <FormItem className="">
-                      <FormLabel>Close Date</FormLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant={"outline"}
-                              className={cn(
-                                "w-full justify-start font-normal",
-                                !field.value && "text-muted-foreground"
-                              )}
-                            >
-                              {field.value ? (
-                                format(field.value, "PPP")
-                              ) : (
-                                <span>Pick a date</span>
-                              )}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            // disabled={(date) =>
-                            //   date > new Date() || date < new Date("1900-01-01")
-                            // }
-                            initialFocus
-                          />
-                        </PopoverContent>
-                      </Popover>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
+            {creditID === form.watch("account_type") ? (
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <FormField
+                    control={form.control}
+                    name="close_date"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel className="pt-2">Close Date</FormLabel>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant={"outline"}
+                                className={cn(
+                                  "w-full justify-start  text-left font-normal",
+                                  !field.value && "text-muted-foreground"
+                                )}
+                              >
+                                <div className="mr-2 h-4 w-4 opacity-50" />
+                                {field.value ? (
+                                  format(field.value, "PP")
+                                ) : (
+                                  <span>Pick a date</span>
+                                )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <FormField
+                    control={form.control}
+                    name="payment_date"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel className="pt-2">Payment Date</FormLabel>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant={"outline"}
+                                className={cn(
+                                  "w-full justify-start  text-left font-normal",
+                                  !field.value && "text-muted-foreground"
+                                )}
+                              >
+                                <div className="mr-2 h-4 w-4 opacity-50" />
+                                {field.value ? (
+                                  format(field.value, "PP")
+                                ) : (
+                                  <span>Pick a date</span>
+                                )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="payment-date">Payment Date</Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start font-normal"
-                    >
-                      <div className="mr-2 h-4 w-4 opacity-50" />
-                      Pick a date
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar mode="single" />
-                  </PopoverContent>
-                </Popover>
-              </div>
-            </div>
+            ) : null}
           </CardContent>
           <CardFooter className="flex justify-between">
             <Link
-              href="#"
+              href="./"
               className="inline-flex h-9 items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
               prefetch={false}
             >
