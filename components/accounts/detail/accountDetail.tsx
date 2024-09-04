@@ -46,6 +46,7 @@ import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { UpsertAccountAction } from "@/actions";
+import { useTranslation } from "@/i18n/client";
 
 const formSchema = z.object({
   currency: z.string(),
@@ -58,14 +59,19 @@ const formSchema = z.object({
   close_date: z.date(),
 });
 export default function AccountDetailComponent({
+  lng,
   banks,
   accountTypes,
   currencies
 }: {
+  lng: string;
   banks: Banks[];
   accountTypes: AccountTypes[];
   currencies: Currencies[];
 }) {
+
+  const { t } = useTranslation(lng);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -83,9 +89,6 @@ export default function AccountDetailComponent({
   const creditID = accountTypes.find((acctype) => acctype.tag === "credit")?.id;
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
     const account: Account = {
       account_number: values.account_number,
       account_type_id: values.account_type,
@@ -107,9 +110,9 @@ export default function AccountDetailComponent({
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Bank Account</CardTitle>
+                <CardTitle>{t("Account.title")}</CardTitle>
                 <CardDescription>
-                  Create or edit your bank account details.
+                {t("Account.description")}
                 </CardDescription>
               </div>
               <Link
@@ -117,7 +120,7 @@ export default function AccountDetailComponent({
                 className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
                 prefetch={false}
               >
-                Back
+                {t("Common.back")}
               </Link>
             </div>
           </CardHeader>
@@ -129,14 +132,14 @@ export default function AccountDetailComponent({
                   name="currency"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Currency</FormLabel>
+                      <FormLabel>{t("Account.form.currency")}</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select currency" />
+                            <SelectValue placeholder={t("Account.form.currency_description")} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -159,14 +162,14 @@ export default function AccountDetailComponent({
                   name="bank"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Bank</FormLabel>
+                      <FormLabel>{t("Account.form.bank")}</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a bank" />
+                            <SelectValue placeholder={t("Account.form.bank_description")} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -189,14 +192,14 @@ export default function AccountDetailComponent({
                   name="account_type"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Account Type</FormLabel>
+                      <FormLabel>{t("Account.form.account_type")}</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select account type" />
+                            <SelectValue placeholder={t("Account.form.account_type_description")} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -223,12 +226,12 @@ export default function AccountDetailComponent({
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>{t("Account.form.name")}</FormLabel>
                     <FormControl>
                       <Input
                         id="name"
                         type="text"
-                        placeholder="Enter account name"
+                        placeholder={t("Account.form.name_description")}
                         {...field}
                       />
                     </FormControl>
@@ -243,12 +246,12 @@ export default function AccountDetailComponent({
                 name="account_number"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Account Number</FormLabel>
+                    <FormLabel>{t("Account.form.account_number")}</FormLabel>
                     <FormControl>
                       <Input
                         id="account-number"
                         type="text"
-                        placeholder="Enter account number"
+                        placeholder={t("Account.form.account_number_description")}
                         {...field}
                       />
                     </FormControl>
@@ -257,11 +260,11 @@ export default function AccountDetailComponent({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="initial-balance">Initial Balance</Label>
+              <Label htmlFor="initial-balance">{t("Account.form.initial_balance")}</Label>
               <Input
                 id="initial-balance"
                 type="number"
-                placeholder="Enter initial balance"
+                placeholder={t("Account.form.initial_balance_description")}
               />
             </div>
             {creditID === form.watch("account_type") ? (
@@ -272,7 +275,7 @@ export default function AccountDetailComponent({
                     name="close_date"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel className="pt-2">Close Date</FormLabel>
+                        <FormLabel className="pt-2">{t("Account.form.close_date")}</FormLabel>
                         <Popover>
                           <PopoverTrigger asChild>
                             <FormControl>
@@ -287,7 +290,7 @@ export default function AccountDetailComponent({
                                 {field.value ? (
                                   format(field.value, "PP")
                                 ) : (
-                                  <span>Pick a date</span>
+                                  <span>{t("Account.form.close_date_description")}</span>
                                 )}
                                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                               </Button>
@@ -313,7 +316,7 @@ export default function AccountDetailComponent({
                     name="payment_date"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel className="pt-2">Payment Date</FormLabel>
+                        <FormLabel className="pt-2">{t("Account.form.payment_date")}</FormLabel>
                         <Popover>
                           <PopoverTrigger asChild>
                             <FormControl>
@@ -328,7 +331,7 @@ export default function AccountDetailComponent({
                                 {field.value ? (
                                   format(field.value, "PP")
                                 ) : (
-                                  <span>Pick a date</span>
+                                  <span>{t("Account.form.payment_date_description")}</span>
                                 )}
                                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                               </Button>
@@ -357,9 +360,9 @@ export default function AccountDetailComponent({
               className="inline-flex h-9 items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
               prefetch={false}
             >
-              Cancel
+              {t("Common.cancel")}
             </Link>
-            <Button type="submit">Save</Button>
+            <Button type="submit">{t("Common.save")}</Button>
           </CardFooter>
         </form>
       </Form>

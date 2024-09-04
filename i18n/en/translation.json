@@ -1,0 +1,29 @@
+{
+  "Account": {
+    "title": "Bank Account",
+    "description": "Create or edit your bank account details.",
+    "form": {
+      "currency": "Currency",
+      "currency_description": "Select currency",
+      "bank": "Bank",
+      "bank_description": "Select a bank",
+      "account_type": "Account Type",
+      "account_type_description": "Select account type",
+      "name": "Account Name",
+      "name_description": "Enter account name",
+      "account_number": "Account Number",
+      "account_number_description": "Enter account number",
+      "initial_balance": "Initial Balance",
+      "initial_balance_description": "Enter initial balance",
+      "close_date": "Close Date",
+      "close_date_description": "Pick a date",
+      "payment_date": "Payment Date",
+      "payment_date_description": "Pick a date"
+    }
+  },
+  "Common": {
+    "back": "Back",
+    "cancel": "Cancel",
+    "save": "Save"
+  }
+}

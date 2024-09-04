@@ -1,0 +1,29 @@
+{
+  "Account": {
+    "title": "Cuenta Bancaria",
+    "description": "Crea o edita los detalles de tu cuenta bancaria.",
+    "form": {
+      "currency": "Moneda",
+      "currency_description": "Selecciona la moneda",
+      "bank": "Banco",
+      "bank_description": "Selecciona un banco",
+      "account_type": "Tipo de Cuenta",
+      "account_type_description": "Selecciona el tipo de cuenta",
+      "name": "Nombre de la Cuenta",
+      "name_description": "Ingresa el nombre de la cuenta",
+      "account_number": "Número de Cuenta",
+      "account_number_description": "Ingresa el número de cuenta",
+      "initial_balance": "Saldo Inicial",
+      "initial_balance_description": "Ingresa el saldo inicial",
+      "close_date": "Fecha de Corte",
+      "close_date_description": "Elige una fecha",
+      "payment_date": "Fecha de Pago",
+      "payment_date_description": "Elige una fecha"
+    }
+  },
+  "Common": {
+    "back": "Atras",
+    "cancel": "Cancelar",
+    "save": "Guardar"
+  }
+}
