@@ -39,7 +39,7 @@ export default async function NavBar({
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
         <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
-          {/* <TooltipMenuList lng={lng} /> */}
+          <TooltipMenuList lng={lng} />
         </nav>
       </aside>
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
@@ -51,7 +51,7 @@ export default async function NavBar({
                 <span className="sr-only">Menu</span>
               </Button>
             </SheetTrigger>
-            {/* <MenuList lng={lng} /> */}
+            <MenuList lng={lng} />
           </Sheet>
           <DynamicBreadCrump lng={lng} />
           <div className="relative ml-auto flex-1 md:grow-0">
@@ -62,7 +62,7 @@ export default async function NavBar({
               className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
             />
           </div>
-          {/* <SettingsList lng={lng} /> */}
+          <SettingsList lng={lng} />
         </header>
         <main className="">
           <div className="">{children}</div>

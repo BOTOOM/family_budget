@@ -21,4 +21,9 @@ const dictionaries = {
   },
 };
 
-export const getDictionary = async (lng: string) => dictionaries[lng as keyof typeof dictionaries]();
+export const getDictionary = async (lng: string) => {
+  if (lng !== 'placeholder.svg') {
+    return dictionaries[lng as keyof typeof dictionaries]()
+  }
+  return dictionaries['en']()
+};
