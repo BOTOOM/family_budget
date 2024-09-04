@@ -6,8 +6,15 @@
 import { Button } from "@/components/ui/button";
 import AccountCard from "./accountCard";
 import Link from "next/link";
+import { Account } from "@/services/types";
 
-export default function AccountComponent({lng}: {lng:string}) {
+export default function AccountComponent({
+  lng,
+  accounts,
+}: {
+  lng: string;
+  accounts: Account[];
+}) {
   return (
     <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
       <div className="flex justify-between items-center mb-6">
@@ -17,9 +24,12 @@ export default function AccountComponent({lng}: {lng:string}) {
         </Link>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <AccountCard />
-        <AccountCard />
-        <AccountCard />
+        {accounts.map((account) => {
+          return (
+            <AccountCard key={account.id} account={account} />
+
+          )
+        })}
       </div>
     </div>
   );

@@ -54,10 +54,8 @@ export async function upsertAccount(account: Account): Promise<Account | null> {
   const {
     data: { user },
   } = await supabaseServer.auth.getUser();
-  account.user_id = user?.id
-  console.log(account)
+  account.user_id = user?.id;
 
-  // return null
   const { data, error } = await supabaseServer
     .from("Accounts")
     .upsert([account])
@@ -69,4 +67,30 @@ export async function upsertAccount(account: Account): Promise<Account | null> {
   }
   const accountResponse: Account = data;
   return accountResponse;
+}
+
+export async function getAccounts(): Promise<Account[]> {
+  const supabaseServer = createClient();
+  const {
+    data: { user },
+  } = await supabaseServer.auth.getUser();
+  const user_id = user?.id;
+  let { data, error } = await supabaseServer
+    .from("Accounts")
+    .select(
+      `*, 
+       bank:bank_id (
+       name
+       )`
+    )
+    .eq("user_id", user_id)
+    .returns<Account[]>();
+  if (error) throw error;
+
+  if (!data) {
+    return [];
+  }
+
+  const accounts: Account[] = data;
+  return accounts;
 }

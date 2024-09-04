@@ -20,7 +20,8 @@ export interface Currencies {
 export interface Account {
   account_number: string | null;
   account_type_id: string;
-  bank_id: string | null;
+  bank_id: string  | null;
+  bank: Banks | null;
   closing_date: string | null;
   currency_id: string;
   current_balance: number;
