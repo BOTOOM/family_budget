@@ -21,7 +21,7 @@ export interface Account {
   account_number: string | null;
   account_type_id: string;
   bank_id: string  | null;
-  bank?: Banks | null;
+  bank?: Banks | undefined;
   closing_date: string | null;
   currency_id: string;
   current_balance: number;

@@ -60,12 +60,12 @@ export async function upsertAccount(account: Account): Promise<Account | null> {
     .from("Accounts")
     .upsert([account])
     .select()
-    .returns<Account>();
+    .returns<Account[]>();
   if (error) throw error;
   if (!data) {
     return null;
   }
-  const accountResponse: Account = data;
+  const accountResponse: Account = data[0];
   return accountResponse;
 }
 
@@ -93,4 +93,21 @@ export async function getAccounts(): Promise<Account[]> {
 
   const accounts: Account[] = data;
   return accounts;
+}
+
+export async function getAccount(id: string): Promise<Account | null> {
+  const supabaseServer = createClient();
+  let { data, error } = await supabaseServer
+    .from("Accounts")
+    .select(`*`)
+    .eq("id", id)
+    .returns<Account[]>();
+  if (error) throw error;
+
+  if (!data) {
+    return null;
+  }
+
+  const account: Account = data[0];
+  return account;
 }
