@@ -1,5 +1,13 @@
 import { createClient } from "@/utils/supabase/server";
-import { Account, AccountTypes, Banks, Currencies } from "./types";
+import {
+  Account,
+  AccountTransactions,
+  AccountTransactionsForm,
+  AccountTypes,
+  Banks,
+  Categories,
+  Currencies,
+} from "./types";
 
 export async function getBanks(): Promise<Banks[]> {
   const supabaseServer = createClient();
@@ -110,4 +118,55 @@ export async function getAccount(id: string): Promise<Account | null> {
 
   const account: Account = data[0];
   return account;
+}
+
+export async function getCategories(): Promise<Categories[]> {
+  const supabaseServer = createClient();
+  let { data, error } = await supabaseServer
+    .from("Categories")
+    .select("id, name, tag")
+    .returns<Categories[]>();
+  if (error) throw error;
+
+  if (!data) {
+    return [];
+  }
+
+  const categories: Categories[] = data;
+  return categories;
+}
+
+export async function upsertTransaction(
+  transactionData: Partial<AccountTransactionsForm>
+): Promise<AccountTransactions | null> {
+  const supabaseServer = createClient();
+  const {
+    data: { user },
+  } = await supabaseServer.auth.getUser();
+  console.log("user",user)
+  console.log("user id",user?.id)
+
+  if (!user?.id) {
+    console.log("SIN USUARIO")
+    return null;
+  }
+  const user_id = user?.id;
+  const transaction: Partial<AccountTransactions> = {
+    ...transactionData,
+    author_id: user_id ?? "",
+    transaction_type: "",
+  };
+
+  const { data, error } = await supabaseServer
+    .from("AccountTransactions")
+    .upsert([transaction])
+    .select()
+    .returns<AccountTransactions[]>();
+  console.log({ data, error })
+  if (error) throw error;
+  if (!data) {
+    return null;
+  }
+  const accountResponse: AccountTransactions = data[0];
+  return accountResponse;
 }

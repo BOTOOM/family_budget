@@ -1,41 +1,58 @@
 "use client";
 
+import { GetCategoriesAction, UpsertAccountTransactionAction } from "@/actions";
 import DateField from "@/components/common/form/DateField";
 import InputField from "@/components/common/form/InputField";
 import SelectField from "@/components/common/form/SelectField";
 import TextAreaField from "@/components/common/form/TextAreaField";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
-import {
-  Form,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
+import { AccountTransactionsForm, Categories } from "@/services/types";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMemo } from "react";
+import { useParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
   name: z.string(),
   date: z.date(),
-  amount: z.number(),
+  amount: z.coerce.number(),
   comment: z.string(),
-  transaction_type: z.string(),
+  transaction_categorie_id: z
+    .string({
+      required_error: "Debe seleccionar una categoria",
+      invalid_type_error: "Debe seleccionar una categoria",
+    })
+    .min(10),
 });
 
 export default function TransactionForm() {
+  const [categories, setCategories] = useState<Categories[]>([]);
+  const params = useParams<{ slug: string }>();
+  console.log(params.slug);
+  useEffect(() => {
+    async function fetchPosts() {
+      let res = await GetCategoriesAction();
+      setCategories(res);
+      console.log(res);
+    }
+    fetchPosts();
+  }, []);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: useMemo(() => {
-      let accountTemp = {
+      let transactionTemp = {
         name: "",
         date: new Date(),
         amount: 0,
         comment: "",
-        transaction_type: "",
+        // transaction_categorie_id: "",
       };
       //   if (account) {
-      //     accountTemp = {
+      //     transactionTemp = {
       //       bank_id: account.bank_id ? account.bank_id : "",
       //       currency_id: account.currency_id,
       //       name: account.name,
@@ -46,12 +63,21 @@ export default function TransactionForm() {
       //       initial_balance: account.initial_balance,
       //     };
       //   }
-      return accountTemp;
+      return transactionTemp;
     }, []),
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("oli", values);
+    const transactionData: AccountTransactionsForm = {
+      account_id: params.slug,
+      amount: values.amount,
+      comment: values.comment,
+      date: values.date.toISOString(),
+      transaction_categorie_id: values.transaction_categorie_id,
+      name: values.name,
+    };
+    await UpsertAccountTransactionAction(transactionData);
   }
 
   return (
@@ -64,6 +90,10 @@ export default function TransactionForm() {
               title="Fecha"
               formControl={form.control}
               description="Ingrese la fecha de la transacción"
+              calendarProps={{
+                disabled: (date) =>
+                  date > new Date() || date < new Date("1900-01-01"),
+              }}
             />
           </div>
           <div className="grid gap-1.5">
@@ -76,21 +106,22 @@ export default function TransactionForm() {
             />
           </div>
           <div className="grid gap-1.5">
+            <InputField
+              name="amount"
+              formControl={form.control}
+              description="monto"
+              title="Monto"
+              typeField="number"
+            />
+          </div>
+          <div className="grid gap-1.5">
             <SelectField
               formControl={form.control}
-              name="transaction_type"
+              name="transaction_categorie_id"
               description="Selecciona una cateogoria"
-              items={[
-                {id:"Shopping",name: "Shopping" },
-                {id:"Food",name: "Food" },
-                {id:"Transportation",name: "Transportation" },
-                {id:"Entertainment",name: "Entertainment" },
-                {id:"Groceries",name: "Groceries" },
-              ]}
+              items={categories}
               title="Categoría"
-
             />
-            
           </div>
 
           <div className="grid gap-1.5">

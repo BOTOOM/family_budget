@@ -31,7 +31,7 @@ export default function SelectField<T extends FieldValues>({
   return (
     <FormField
       control={formControl}
-      i18nIsDynamicList
+      // i18nIsDynamicList
       name={name}
       render={({ field }) => (
         <FormItem>

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { Calendar, CalendarProps } from "@/components/ui/calendar";
 import {
   FormControl,
   FormField,
@@ -23,11 +23,16 @@ export default function DateField<T extends FieldValues>({
   title,
   formControl,
   description,
+  calendarProps,
 }: {
   name: Path<T>;
   title: string;
   description: string;
   formControl: Control<T>; // Definimos que formControl es un Control genérico
+  calendarProps?: Omit<
+    CalendarProps,
+    "mode" | "selected" | "onSelect" | "initialFocus"
+  >;
 }) {
   return (
     <FormField
@@ -62,6 +67,7 @@ export default function DateField<T extends FieldValues>({
                 selected={field.value}
                 onSelect={field.onChange}
                 initialFocus
+                {...calendarProps}
               />
             </PopoverContent>
           </Popover>

@@ -39,5 +39,28 @@ export interface AccountTransactions {
   comment: string | null;
   date: string;
   id: string;
+  transaction_categorie_id: string | null;
   transaction_type: string;
+  name: string
+
+}
+
+export interface AccountTransactionsForm
+  extends Omit<AccountTransactions, "transaction_type" | "author_id" | "id"> {
+    id?: string;
+  }
+
+export interface Categories {
+  family_id: string | null;
+  id: string;
+  is_general: boolean | null;
+  name: string;
+  parent_category_id: string | null;
+  tag: string | null;
+}
+
+export interface TransactionCategories {
+  category_id: string | null;
+  id: string;
+  transaction_id: string;
 }
