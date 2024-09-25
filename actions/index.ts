@@ -26,6 +26,7 @@ export async function UpsertAccountTransactionAction(transaction: AccountTransac
   console.log("llegamos", transaction);
   const result = await upsertTransaction(transaction);
   console.log("UpsertAccountTransactionAction", result);
+  return result
   // if (account.id) {
   //   redirect(`/${lng}/accounts/${account.id}`);
   // } else {

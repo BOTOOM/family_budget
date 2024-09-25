@@ -1,5 +1,5 @@
 import AccountTransactionsComponent from "@/components/accounts/accountTransactions/accountTransaction";
-import { getCategories } from "@/services";
+import { getaccountTransactions, getCategories } from "@/services";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -18,12 +18,13 @@ export default async function AccountTransactionsPage({
   if (!user) {
     return redirect("/login");
   }
-  
+  const transactions = await getaccountTransactions(slug)
+  console.log("tran", transactions)
 
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
       <Suspense>
-        <AccountTransactionsComponent />
+        <AccountTransactionsComponent accountTransactions={transactions} />
       </Suspense>
     </div>
   );

@@ -8,7 +8,11 @@ import TextAreaField from "@/components/common/form/TextAreaField";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
-import { AccountTransactionsForm, Categories } from "@/services/types";
+import {
+  AccountTransactions,
+  AccountTransactionsForm,
+  Categories,
+} from "@/services/types";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams } from "next/navigation";
@@ -29,7 +33,14 @@ const formSchema = z.object({
     .min(10),
 });
 
-export default function TransactionForm() {
+export default function TransactionForm({
+  transaction,
+  setShowModal,
+}: {
+  transaction: AccountTransactions;
+  setShowModal: Function;
+}) {
+  console.log("transaccion modal", transaction);
   const [categories, setCategories] = useState<Categories[]>([]);
   const params = useParams<{ slug: string }>();
   console.log(params.slug);
@@ -49,20 +60,17 @@ export default function TransactionForm() {
         date: new Date(),
         amount: 0,
         comment: "",
-        // transaction_categorie_id: "",
+        transaction_categorie_id: "",
       };
-      //   if (account) {
-      //     transactionTemp = {
-      //       bank_id: account.bank_id ? account.bank_id : "",
-      //       currency_id: account.currency_id,
-      //       name: account.name,
-      //       account_number: account.account_number ?? "",
-      //       account_type_id: account.account_type_id,
-      //       closing_date: new Date(),
-      //       payment_date: new Date(),
-      //       initial_balance: account.initial_balance,
-      //     };
-      //   }
+      if (transaction.id) {
+        transactionTemp = {
+          amount: transaction.amount,
+          comment: transaction.comment ?? "",
+          date: new Date(transaction.date),
+          name: transaction.name,
+          transaction_categorie_id: transaction.transaction_categorie_id ?? "",
+        };
+      }
       return transactionTemp;
     }, []),
   });
@@ -77,7 +85,13 @@ export default function TransactionForm() {
       transaction_categorie_id: values.transaction_categorie_id,
       name: values.name,
     };
-    await UpsertAccountTransactionAction(transactionData);
+    if (transaction.id) {
+      transactionData.id = transaction.id;
+    }
+    const response = await UpsertAccountTransactionAction(transactionData);
+    if (response?.id) {
+      setShowModal(false)
+    }
   }
 
   return (

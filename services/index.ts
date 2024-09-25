@@ -143,11 +143,11 @@ export async function upsertTransaction(
   const {
     data: { user },
   } = await supabaseServer.auth.getUser();
-  console.log("user",user)
-  console.log("user id",user?.id)
+  console.log("user", user);
+  console.log("user id", user?.id);
 
   if (!user?.id) {
-    console.log("SIN USUARIO")
+    console.log("SIN USUARIO");
     return null;
   }
   const user_id = user?.id;
@@ -162,11 +162,36 @@ export async function upsertTransaction(
     .upsert([transaction])
     .select()
     .returns<AccountTransactions[]>();
-  console.log({ data, error })
+  console.log({ data, error });
   if (error) throw error;
   if (!data) {
     return null;
   }
   const accountResponse: AccountTransactions = data[0];
   return accountResponse;
+}
+
+export async function getaccountTransactions(
+  account_id: string
+): Promise<AccountTransactions[]> {
+  const supabaseServer = createClient();
+  let { data, error } = await supabaseServer
+    .from("AccountTransactions")
+    .select(
+      `*, 
+       categorie:transaction_categorie_id (
+       name
+       )`
+    )
+    .eq("account_id", account_id)
+    .order('date', { ascending: false })
+    .range(0, 9)
+    .returns<AccountTransactions[]>();
+  if (error) throw error;
+
+  if (!data) {
+    return [];
+  }
+  const transactions: AccountTransactions[] = data;
+  return transactions;
 }

@@ -41,14 +41,14 @@ export interface AccountTransactions {
   id: string;
   transaction_categorie_id: string | null;
   transaction_type: string;
-  name: string
-
+  name: string;
+  categorie?: { name: string } | undefined;
 }
 
 export interface AccountTransactionsForm
   extends Omit<AccountTransactions, "transaction_type" | "author_id" | "id"> {
-    id?: string;
-  }
+  id?: string;
+}
 
 export interface Categories {
   family_id: string | null;

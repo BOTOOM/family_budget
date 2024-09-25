@@ -5,67 +5,34 @@
  */
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import TransactionsTable from "./transactionsTable";
 import CustomDialog from "@/components/common/CustomDialog";
 import TransactionForm from "./transactionForm";
 import { Label } from "@/components/ui/label";
+import { AccountTransactions } from "@/services/types";
+import { FileWarningIcon } from "lucide-react";
 
-export default function AccountTransactionsComponent() {
-  const [transactions, setTransactions] = useState([
-    {
-      id: 1,
-      date: "2023-04-15",
-      merchant: "Amazon",
-      category: "Shopping",
-      author: "John Doe",
-      notes: "Compra de libros",
-    },
-    {
-      id: 2,
-      date: "2023-04-12",
-      merchant: "Restaurante XYZ",
-      category: "Food",
-      author: "Jane Smith",
-      notes: "Almuerzo con amigos",
-    },
-    {
-      id: 3,
-      date: "2023-04-10",
-      merchant: "Gasolinera ABC",
-      category: "Transportation",
-      author: "Michael Johnson",
-      notes: "Reabastecimiento de combustible",
-    },
-    {
-      id: 4,
-      date: "2023-04-08",
-      merchant: "Tienda de Música",
-      category: "Entertainment",
-      author: "Sarah Lee",
-      notes: "Compra de nuevo álbum",
-    },
-    {
-      id: 5,
-      date: "2023-04-05",
-      merchant: "Supermercado XYZ",
-      category: "Groceries",
-      author: "David Brown",
-      notes: "Compra semanal",
-    },
-  ]);
+export default function AccountTransactionsComponent({
+  accountTransactions,
+}: {
+  accountTransactions: AccountTransactions[];
+}) {
+  const [transactions, setTransactions] = useState<AccountTransactions[]>([]);
   const [dataTransaction, setdataTransaction] = useState<any>(null);
   const [showImportModal, setShowImportModal] = useState(false);
-
-
+  useEffect(() => {
+    setTransactions(accountTransactions);
+    return () => {};
+  }, [accountTransactions]);
 
   const handleImport = () => {
     setShowImportModal(true);
   };
   const handleCreate = () => {
-    setdataTransaction({ a: "" });
+    setdataTransaction({});
   };
   const handleImportSubmit = (importedTransactions) => {
     setTransactions([...transactions, ...importedTransactions]);
@@ -135,7 +102,7 @@ export default function AccountTransactionsComponent() {
           title="Editar transacción"
           setShowModal={setdataTransaction}
         >
-          <TransactionForm />
+          <TransactionForm transaction={dataTransaction}  setShowModal={setdataTransaction}/>
         </CustomDialog>
       )}
       {showImportModal && (
@@ -152,7 +119,19 @@ export default function AccountTransactionsComponent() {
           </div>
         </CustomDialog>
       )}
-      <TransactionsTable setEditingTransaction={setdataTransaction} />
+      {transactions.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-64 bg-muted rounded-lg">
+          <FileWarningIcon className="h-12 w-12 text-muted-foreground" />
+          <p className="mt-4 text-muted-foreground">
+            No hay transacciones cargadas
+          </p>
+        </div>
+      ) : (
+        <TransactionsTable
+          setEditingTransaction={setdataTransaction}
+          accountTransactions={transactions}
+        />
+      )}
     </div>
   );
 }
