@@ -27,7 +27,6 @@ export default function AccountComponent({
         {accounts.map((account) => {
           return (
             <AccountCard key={account.id} account={account} />
-
           )
         })}
       </div>

@@ -25,7 +25,9 @@ export default function AccountCard({ account }: { account: Account }) {
           <div className="font-medium">{account.bank?.name}</div>
         </div>
         <div className="flex justify-between">
-          <Button variant="outline">View Transactions</Button>
+          <Link href={`accounts/${account.id}/transactions`}>
+            <Button variant="outline">View Transactions</Button>
+          </Link>
           <Link href={`accounts/${account.id}`}>
             <Button variant="secondary">Edit</Button>
           </Link>

@@ -20,7 +20,7 @@ export interface Currencies {
 export interface Account {
   account_number: string | null;
   account_type_id: string;
-  bank_id: string  | null;
+  bank_id: string | null;
   bank?: Banks | undefined;
   closing_date: string | null;
   currency_id: string;
@@ -30,4 +30,14 @@ export interface Account {
   name: string;
   payment_date: string | null;
   user_id?: string;
+}
+
+export interface AccountTransactions {
+  account_id: string;
+  amount: number;
+  author_id: string;
+  comment: string | null;
+  date: string;
+  id: string;
+  transaction_type: string;
 }
