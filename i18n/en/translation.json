@@ -42,7 +42,9 @@
     },
     "form": {
       "title": "Transaction data",
-      "create": "Create Transaction"
+      "create": "Create Transaction",
+      "debit": "Salida",
+      "credit": "Entrada"
     }
   },
   "Categories": {
@@ -68,7 +70,8 @@
     "inversiones": "Investments",
     "hobbies_y_pasabienpos": "Hobbies and Pastimes",
     "electronica_y_tecnologia": "Electronics and Technology",
-    "cuidado_personal": "Personal Care"
+    "cuidado_personal": "Personal Care",
+    "salario": "Salary"
   },  
   "Common": {
     "back": "Back",

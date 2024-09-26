@@ -8,7 +8,16 @@ import SelectFieldI18n from "@/components/common/form/SelectFieldI18n";
 import TextAreaField from "@/components/common/form/TextAreaField";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
-import { Form } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTranslation } from "@/i18n/client";
 import {
   AccountTransactions,
@@ -25,7 +34,7 @@ import { z } from "zod";
 const formSchema = z.object({
   name: z.string(),
   date: z.date(),
-  amount: z.coerce.number(),
+  amount: z.coerce.number().gte(0),
   comment: z.string(),
   transaction_categorie_id: z
     .string({
@@ -45,8 +54,8 @@ export default function TransactionForm({
   lng: string;
 }) {
   const { t } = useTranslation(lng);
-  console.log("transaccion modal", transaction);
   const [categories, setCategories] = useState<Categories[]>([]);
+  const [isDebit, setIsDebit] = useState(true);
   const params = useParams<{ slug: string }>();
   console.log(params.slug);
   useEffect(() => {
@@ -69,27 +78,33 @@ export default function TransactionForm({
       };
       if (transaction.id) {
         transactionTemp = {
-          amount: transaction.amount,
+          amount: adjustNumber(false, transaction.amount),
           comment: transaction.comment ?? "",
           date: new Date(transaction.date),
           name: transaction.name,
           transaction_categorie_id: transaction.transaction_categorie_id ?? "",
         };
+        setIsDebit(transaction.is_debit);
       }
       return transactionTemp;
     }, []),
   });
+  function adjustNumber(is_debit: boolean, number: number) {
+    return is_debit ? -Math.abs(number) : Math.abs(number);
+  }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("oli", values);
     const transactionData: AccountTransactionsForm = {
       account_id: params.slug,
-      amount: values.amount,
+      amount: adjustNumber(isDebit, values.amount),
       comment: values.comment,
       date: values.date.toISOString(),
       transaction_categorie_id: values.transaction_categorie_id,
       name: values.name,
+      is_debit: isDebit,
     };
+    console.log("oli", transactionData);
+
     if (transaction.id) {
       transactionData.id = transaction.id;
     }
@@ -131,7 +146,21 @@ export default function TransactionForm({
               description="monto"
               title={t("Transactions.table.ammount")}
               typeField="number"
+              min={0}
             />
+          </div>
+          <div className="grid gap-1.5">
+            <Tabs
+              defaultValue={`${isDebit}`}
+              onValueChange={(value) => setIsDebit(value==="true")}
+            >
+              <TabsList>
+                <TabsTrigger value="false">{t("Transactions.form.credit")}</TabsTrigger>
+                <TabsTrigger value="true">{t("Transactions.form.debit")}</TabsTrigger>
+              </TabsList>
+              {/* <TabsContent value="false">Credito</TabsContent>
+              <TabsContent value="true">Debito</TabsContent> */}
+            </Tabs>
           </div>
           <div className="grid gap-1.5">
             <SelectFieldI18n

@@ -15,9 +15,11 @@ export default function InputField<T extends FieldValues>({
   formControl,
   description,
   typeField,
+  min,
 }: {
   name: Path<T>;
   title: string;
+  min?: number;
   description: string;
   typeField: string;
   formControl: Control<T>; // Definimos que formControl es un Control genérico
@@ -32,6 +34,7 @@ export default function InputField<T extends FieldValues>({
           <FormControl>
             <Input
               id={name}
+              min={min}
               type={typeField}
               placeholder={description}
               {...field}

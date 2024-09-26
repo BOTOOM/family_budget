@@ -125,6 +125,7 @@ export async function getCategories(): Promise<Categories[]> {
 	const { data, error } = await supabaseServer
 		.from("Categories")
 		.select("id, name, tag")
+		.order("name", { ascending: true })
 		.returns<Categories[]>();
 	if (error) throw error;
 

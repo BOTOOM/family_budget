@@ -43,6 +43,7 @@ export interface AccountTransactions {
 	transaction_type: string;
 	name: string;
 	categorie?: { name: string; tag: string } | undefined;
+	is_debit: boolean
 }
 
 export interface AccountTransactionsForm
