@@ -1,39 +1,39 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.2/schema.json",
-  "vcs": {
-    "enabled": false,
-    "clientKind": "git",
-    "useIgnoreFile": false
-  },
-  "files": {
-    "include": [
-      "actions/**/*.ts",
-      "app/**/*.ts",
-      "components/**/*.ts",
-      "i18n/**/*.ts",
-      "services/**/*.ts",
-      "utils/**/*.ts"
-    ],
-    "ignoreUnknown": false,
-    "ignore": ["**/*.min.js"]
-  },
-  "formatter": {
-    "enabled": true,
-    "indentStyle": "tab"
-  },
-  "organizeImports": {
-    "enabled": true
-  },
-  "linter": {
-    "enabled": true,
-	"ignore": [".next", "**/ui/**"],
-    "rules": {
-      "recommended": true
-    }
-  },
-  "javascript": {
-    "formatter": {
-      "quoteStyle": "double"
-    }
-  }
+	"$schema": "https://biomejs.dev/schemas/1.9.2/schema.json",
+	"vcs": {
+		"enabled": false,
+		"clientKind": "git",
+		"useIgnoreFile": false
+	},
+	"files": {
+		"include": [
+			"actions/**/*.ts",
+			"app/**/*.ts",
+			"components/**/*.ts",
+			"i18n/**/*.ts",
+			"services/**/*.ts",
+			"utils/**/*.ts"
+		],
+		"ignoreUnknown": false,
+		"ignore": ["**/*.min.js"]
+	},
+	"formatter": {
+		"enabled": true,
+		"indentStyle": "tab"
+	},
+	"organizeImports": {
+		"enabled": true
+	},
+	"linter": {
+		"enabled": true,
+		"ignore": [".next", "**/ui/**"],
+		"rules": {
+			"recommended": true
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "double"
+		}
+	}
 }
