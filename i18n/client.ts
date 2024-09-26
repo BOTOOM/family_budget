@@ -19,7 +19,7 @@ use(initReactI18next)
   .use(LanguageDetector)
   .use(
     resourcesToBackend(
-      (language: any, namespace: any) => import(`./${language}/${namespace}.json`)
+      (language: string, namespace: string) => import(`./${language}/${namespace}.json`)
     )
   )
   .init({
@@ -32,8 +32,8 @@ use(initReactI18next)
   });
 
 export function useTranslation(
-  lng: any,
-  ns?: any,
+  lng: string,
+  ns?: string | string[],
   options?: UseTranslationOptions<undefined> | undefined
 ) {
   const [cookies, setCookie] = useCookies([cookieName]);

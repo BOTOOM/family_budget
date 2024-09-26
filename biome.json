@@ -26,6 +26,7 @@
   },
   "linter": {
     "enabled": true,
+	"ignore": [".next", "**/ui/**"],
     "rules": {
       "recommended": true
     }
