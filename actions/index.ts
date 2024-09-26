@@ -1,7 +1,7 @@
 "use server";
 
 import { getCategories, upsertAccount, upsertTransaction } from "@/services";
-import { Account, AccountTransactionsForm, Categories } from "@/services/types";
+import type { Account, AccountTransactionsForm, Categories } from "@/services/types";
 import { redirect } from "next/navigation";
 
 export async function UpsertAccountAction(account: Account, lng: string) {

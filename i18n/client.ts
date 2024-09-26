@@ -7,7 +7,7 @@ import resourcesToBackend from "i18next-resources-to-backend";
 import { useCookies } from "react-cookie";
 import {
   initReactI18next,
-  UseTranslationOptions,
+  type UseTranslationOptions,
   useTranslation as useTranslationOrg
 } from "react-i18next";
 

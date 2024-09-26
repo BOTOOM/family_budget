@@ -29,12 +29,12 @@ export default function TransactionsTable({
 }) {
   const { t } = useTranslation(lng);
   console.log("llegaron",accountTransactions)
-  const handleEdit = (transaction) => {
+  const handleEdit = (transaction: AccountTransactions) => {
     setEditingTransaction(transaction);
   };
 
   const handleDelete = (id: string) => {
-    setTransactions(transactions.filter((t) => t.id !== id));
+    // setTransactions(transactions.filter((t) => t.id !== id));
   };
 
   return (

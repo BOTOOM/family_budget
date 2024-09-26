@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
-import {
+import type {
   Account,
   AccountTransactions,
   AccountTransactionsForm,
@@ -11,7 +11,7 @@ import {
 
 export async function getBanks(): Promise<Banks[]> {
   const supabaseServer = createClient();
-  let { data, error } = await supabaseServer
+  const { data, error } = await supabaseServer
     .from("Banks")
     .select("id, name")
     .returns<Banks[]>();
@@ -27,7 +27,7 @@ export async function getBanks(): Promise<Banks[]> {
 
 export async function getAccountTypes(): Promise<AccountTypes[]> {
   const supabaseServer = createClient();
-  let { data, error } = await supabaseServer
+  const { data, error } = await supabaseServer
     .from("AccountTypes")
     .select("id, name, tag")
     .returns<AccountTypes[]>();
@@ -43,7 +43,7 @@ export async function getAccountTypes(): Promise<AccountTypes[]> {
 
 export async function getCurrencies(): Promise<Currencies[]> {
   const supabaseServer = createClient();
-  let { data, error } = await supabaseServer
+  const { data, error } = await supabaseServer
     .from("Currencies")
     .select("id, name, tag")
     .returns<Currencies[]>();
@@ -83,7 +83,7 @@ export async function getAccounts(): Promise<Account[]> {
     data: { user },
   } = await supabaseServer.auth.getUser();
   const user_id = user?.id;
-  let { data, error } = await supabaseServer
+  const { data, error } = await supabaseServer
     .from("Accounts")
     .select(
       `*, 
@@ -105,9 +105,9 @@ export async function getAccounts(): Promise<Account[]> {
 
 export async function getAccount(id: string): Promise<Account | null> {
   const supabaseServer = createClient();
-  let { data, error } = await supabaseServer
+  const { data, error } = await supabaseServer
     .from("Accounts")
-    .select(`*`)
+    .select("*")
     .eq("id", id)
     .returns<Account[]>();
   if (error) throw error;
@@ -122,7 +122,7 @@ export async function getAccount(id: string): Promise<Account | null> {
 
 export async function getCategories(): Promise<Categories[]> {
   const supabaseServer = createClient();
-  let { data, error } = await supabaseServer
+  const { data, error } = await supabaseServer
     .from("Categories")
     .select("id, name, tag")
     .returns<Categories[]>();
@@ -175,7 +175,7 @@ export async function getaccountTransactions(
   account_id: string
 ): Promise<AccountTransactions[]> {
   const supabaseServer = createClient();
-  let { data, error } = await supabaseServer
+  const { data, error } = await supabaseServer
     .from("AccountTransactions")
     .select(
       `*, 

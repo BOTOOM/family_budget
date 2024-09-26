@@ -1,6 +1,6 @@
-import { createInstance, FlatNamespace, KeyPrefix } from "i18next";
+import { createInstance, type FlatNamespace, type KeyPrefix } from "i18next";
 import resourcesToBackend from "i18next-resources-to-backend";
-import { FallbackNs } from "react-i18next";
+import type { FallbackNs } from "react-i18next";
 import { initReactI18next } from "react-i18next/initReactI18next";
 
 import { getOptions } from "./settings";
