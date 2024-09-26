@@ -10,7 +10,6 @@ export default async function AccountsPage({
   params: { lng: string };
 }) {
   const accounts = await getAccounts();
-  console.log(accounts)
 
   return (
     <div className=" flex items-center justify-center">

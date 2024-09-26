@@ -180,7 +180,7 @@ export async function getaccountTransactions(
     .select(
       `*, 
        categorie:transaction_categorie_id (
-       name
+       name, tag
        )`
     )
     .eq("account_id", account_id)

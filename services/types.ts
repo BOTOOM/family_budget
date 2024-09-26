@@ -42,7 +42,7 @@ export interface AccountTransactions {
   transaction_categorie_id: string | null;
   transaction_type: string;
   name: string;
-  categorie?: { name: string } | undefined;
+  categorie?: { name: string; tag: string } | undefined;
 }
 
 export interface AccountTransactionsForm

@@ -8,7 +8,13 @@ const dictionaries = {
     const navbar = await import("@/i18n/en/navbar.json").then(
       (module) => module.default
     );
-    return { login, navbar };
+    const account = await import("@/i18n/en/account.json").then(
+      (module) => module.default
+    );
+    const common = await import("@/i18n/en/common.json").then(
+      (module) => module.default
+    );
+    return { login, navbar, account, common };
   },
   es: async () => {
     const login = await import("@/i18n/es/login.json").then(
@@ -17,13 +23,19 @@ const dictionaries = {
     const navbar = await import("@/i18n/es/navbar.json").then(
       (module) => module.default
     );
-    return { login, navbar };
+    const account = await import("@/i18n/es/account.json").then(
+      (module) => module.default
+    );
+    const common = await import("@/i18n/es/common.json").then(
+      (module) => module.default
+    );
+    return { login, navbar, account, common };
   },
 };
 
 export const getDictionary = async (lng: string) => {
-  if (lng !== 'placeholder.svg') {
-    return dictionaries[lng as keyof typeof dictionaries]()
+  if (lng !== "placeholder.svg") {
+    return dictionaries[lng as keyof typeof dictionaries]();
   }
-  return dictionaries['en']()
+  return dictionaries["en"]();
 };

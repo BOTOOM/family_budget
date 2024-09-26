@@ -16,14 +16,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { EllipsisVertical } from "lucide-react";
 import { AccountTransactions } from "@/services/types";
+import { useTranslation } from "@/i18n/client";
 
 export default function TransactionsTable({
   accountTransactions,
   setEditingTransaction,
+  lng
 }: {
   accountTransactions: AccountTransactions[];
   setEditingTransaction: Function;
+  lng: string
 }) {
+  const { t } = useTranslation(lng);
   console.log("llegaron",accountTransactions)
   const handleEdit = (transaction) => {
     setEditingTransaction(transaction);
@@ -38,13 +42,13 @@ export default function TransactionsTable({
       <table className="w-full table-auto">
         <thead>
           <tr className="bg-gray-200 text-gray-700 hidden sm:table-row">
-            <th className="px-4 py-2 text-left">Fecha</th>
-            <th className="px-4 py-2 text-left">Comercio</th>
-            <th className="px-4 py-2 text-left">Monto</th>
-            <th className="px-4 py-2 text-left">Categoría</th>
-            <th className="px-4 py-2 text-left">Autor</th>
-            <th className="px-4 py-2 text-left">Notas</th>
-            <th className="px-4 py-2 text-right">Acciones</th>
+            <th className="px-4 py-2 text-left">{t("Transactions.table.date")}</th>
+            <th className="px-4 py-2 text-left">{t("Transactions.table.commerce")}</th>
+            <th className="px-4 py-2 text-left">{t("Transactions.table.ammount")}</th>
+            <th className="px-4 py-2 text-left">{t("Transactions.table.category")}</th>
+            <th className="px-4 py-2 text-left">{t("Transactions.table.author")}</th>
+            <th className="px-4 py-2 text-left">{t("Transactions.table.notes")}</th>
+            <th className="px-4 py-2 text-right">{t("Transactions.table.actions")}</th>
           </tr>
         </thead>
         <tbody>
@@ -64,7 +68,7 @@ export default function TransactionsTable({
               </td>
               <td className="px-4 py-2 sm:table-cell block">
                 <Badge variant="default">
-                  {transaction.categorie?.name ?? ""}
+                {t(`Categories.${transaction.categorie?.tag ?? ""}`)}
                 </Badge>
               </td>
               <td className="px-4 py-2 sm:table-cell hidden">
@@ -86,7 +90,7 @@ export default function TransactionsTable({
                       <DropdownMenuItem onClick={() => handleEdit(transaction)}>
                         Editar
                       </DropdownMenuItem>
-                      <DropdownMenuItem
+                      <DropdownMenuItem disabled
                         onClick={() => handleDelete(transaction.id)}
                       >
                         Eliminar

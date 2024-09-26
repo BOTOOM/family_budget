@@ -4,10 +4,12 @@ import { GetCategoriesAction, UpsertAccountTransactionAction } from "@/actions";
 import DateField from "@/components/common/form/DateField";
 import InputField from "@/components/common/form/InputField";
 import SelectField from "@/components/common/form/SelectField";
+import SelectFieldI18n from "@/components/common/form/SelectFieldI18n";
 import TextAreaField from "@/components/common/form/TextAreaField";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
+import { useTranslation } from "@/i18n/client";
 import {
   AccountTransactions,
   AccountTransactionsForm,
@@ -36,10 +38,13 @@ const formSchema = z.object({
 export default function TransactionForm({
   transaction,
   setShowModal,
+  lng,
 }: {
   transaction: AccountTransactions;
   setShowModal: Function;
+  lng: string;
 }) {
+  const { t } = useTranslation(lng);
   console.log("transaccion modal", transaction);
   const [categories, setCategories] = useState<Categories[]>([]);
   const params = useParams<{ slug: string }>();
@@ -90,7 +95,7 @@ export default function TransactionForm({
     }
     const response = await UpsertAccountTransactionAction(transactionData);
     if (response?.id) {
-      setShowModal(false)
+      setShowModal(false);
     }
   }
 
@@ -101,7 +106,7 @@ export default function TransactionForm({
           <div className="grid gap-1.5">
             <DateField
               name="date"
-              title="Fecha"
+              title={t("Transactions.table.date")}
               formControl={form.control}
               description="Ingrese la fecha de la transacción"
               calendarProps={{
@@ -115,7 +120,7 @@ export default function TransactionForm({
               name="name"
               formControl={form.control}
               description="comercio"
-              title="Comercio"
+              title={t("Transactions.table.commerce")}
               typeField="text"
             />
           </div>
@@ -124,17 +129,18 @@ export default function TransactionForm({
               name="amount"
               formControl={form.control}
               description="monto"
-              title="Monto"
+              title={t("Transactions.table.ammount")}
               typeField="number"
             />
           </div>
           <div className="grid gap-1.5">
-            <SelectField
+            <SelectFieldI18n
+              lng={lng}
               formControl={form.control}
               name="transaction_categorie_id"
               description="Selecciona una cateogoria"
               items={categories}
-              title="Categoría"
+              title={t("Transactions.table.category")}
             />
           </div>
 
@@ -143,13 +149,13 @@ export default function TransactionForm({
               formControl={form.control}
               name="comment"
               description="Comentarios sobre la transaccion"
-              title="Comentarios"
+              title={t("Transactions.table.notes")}
             />
           </div>
         </div>
         <DialogFooter>
           <Button className="mt-1" type="submit">
-            Guardar
+            {t("Common.save")}
           </Button>
         </DialogFooter>
       </form>

@@ -19,11 +19,62 @@
       "close_date_description": "Elige una fecha",
       "payment_date": "Fecha de Pago",
       "payment_date_description": "Elige una fecha"
+    },
+    "page": {
+      "view": "Ver Movimientos",
+      "add_account": "Añadir cuenta",
+      "bank": "Banco"
     }
+  },
+  "Transactions": {
+    "title": "Transacciones bancarias",
+    "import": "Importar movimientos",
+    "create": "Crear movimiento",
+    "empty": "No hay transacciones cargadas",
+    "table": {
+      "date": "Fecha",
+      "commerce": "Comercio",
+      "ammount": "Monto",
+      "category": "Categoria",
+      "author": "Autor",
+      "notes": "Notas",
+      "actions": "Acciones"
+    },
+    "form": {
+      "title": "Datos de la transacción",
+      "create": "Crear transacción"
+    }
+  },
+  "Categories": {
+    "vivienda": "Vivienda",
+    "mercado": "Mercado",
+    "transporte": "Transporte",
+    "servicios_basicos": "Servicios Básicos",
+    "traslado_a_otra_cuenta": "Traslado a otra cuenta",
+    "ahorros": "Ahorros",
+    "suscripciones": "Suscripciones",
+    "salud_y_bienestar": "Salud y Bienestar",
+    "entretenimiento": "Entretenimiento",
+    "comida_y_bebidas": "Comida y Bebidas",
+    "educacion": "Educación",
+    "ropa_y_calzado": "Ropa y Calzado",
+    "mascotas": "Mascotas",
+    "hogar_y_mantenimiento": "Hogar y Mantenimiento",
+    "impuestos_y_servicios_gubernamentales": "Impuestos y Servicios Gubernamentales",
+    "donaciones_y_caridad": "Donaciones y Caridad",
+    "regalos_y_celebraciones": "Regalos y Celebraciones",
+    "viajes_y_vacaciones": "Viajes y Vacaciones",
+    "deudas_y_prestamos": "Deudas y Préstamos",
+    "inversiones": "Inversiones",
+    "hobbies_y_pasabienpos": "Hobbies y Pasatiempos",
+    "electronica_y_tecnologia": "Electrónica y Tecnología",
+    "cuidado_personal": "Cuidado Personal"
   },
   "Common": {
     "back": "Atras",
     "cancel": "Cancelar",
-    "save": "Guardar"
+    "save": "Guardar",
+    "edit": "Editar",
+    "delete": "Eliminar"
   }
 }

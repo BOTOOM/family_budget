@@ -19,11 +19,62 @@
       "close_date_description": "Pick a date",
       "payment_date": "Payment Date",
       "payment_date_description": "Pick a date"
+    },
+    "page": {
+      "view": "View Transactions",
+      "add_account": "Add Account",
+      "bank" : "Bank"
     }
   },
+  "Transactions": {
+    "title": "Bank transactions",
+    "import": "Import transactions",
+    "create": "Create Transaction",
+    "empty": "No transactions loaded",
+    "table": {
+      "date": "Date",
+      "commerce": "Commerce",
+      "ammount": "Ammount",
+      "category": "Category",
+      "author": "Author",
+      "notes": "Notes",
+      "actions": "Actions"
+    },
+    "form": {
+      "title": "Transaction data",
+      "create": "Create Transaction"
+    }
+  },
+  "Categories": {
+    "vivienda": "Housing",
+    "mercado": "Groceries",
+    "transporte": "Transportation",
+    "servicios_basicos": "Basic Services",
+    "traslado_a_otra_cuenta": "Transfer to another account",
+    "ahorros": "Savings",
+    "suscripciones": "Subscriptions",
+    "salud_y_bienestar": "Health and Wellness",
+    "entretenimiento": "Entertainment",
+    "comida_y_bebidas": "Food and Drinks",
+    "educacion": "Education",
+    "ropa_y_calzado": "Clothing and Footwear",
+    "mascotas": "Pets",
+    "hogar_y_mantenimiento": "Home and Maintenance",
+    "impuestos_y_servicios_gubernamentales": "Taxes and Government Services",
+    "donaciones_y_caridad": "Donations and Charity",
+    "regalos_y_celebraciones": "Gifts and Celebrations",
+    "viajes_y_vacaciones": "Travel and Vacations",
+    "deudas_y_prestamos": "Debts and Loans",
+    "inversiones": "Investments",
+    "hobbies_y_pasabienpos": "Hobbies and Pastimes",
+    "electronica_y_tecnologia": "Electronics and Technology",
+    "cuidado_personal": "Personal Care"
+  },  
   "Common": {
     "back": "Back",
     "cancel": "Cancel",
-    "save": "Save"
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete"
   }
 }

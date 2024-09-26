@@ -14,12 +14,16 @@ import TransactionForm from "./transactionForm";
 import { Label } from "@/components/ui/label";
 import { AccountTransactions } from "@/services/types";
 import { FileWarningIcon } from "lucide-react";
+import { useTranslation } from "@/i18n/client";
 
 export default function AccountTransactionsComponent({
   accountTransactions,
+  lng,
 }: {
   accountTransactions: AccountTransactions[];
+  lng: string;
 }) {
+  const { t } = useTranslation(lng);
   const [transactions, setTransactions] = useState<AccountTransactions[]>([]);
   const [dataTransaction, setdataTransaction] = useState<any>(null);
   const [showImportModal, setShowImportModal] = useState(false);
@@ -64,9 +68,9 @@ export default function AccountTransactionsComponent({
   return (
     <div className="container mx-auto px-4 py-8 sm:px-6 md:px-8 lg:px-10">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Transacciones bancarias</h1>
+        <h1 className="text-2xl font-bold">{t("Transactions.title")}</h1>
         <Button variant="outline" onClick={handleGoBack}>
-          Volver
+          {t("Common.back")}
         </Button>
       </div>
       <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
@@ -77,7 +81,7 @@ export default function AccountTransactionsComponent({
             onClick={handleImport}
             className="w-full sm:w-auto"
           >
-            Importar transacciones
+            {t("Transactions.import")}
           </Button>
           <Button
             size="sm"
@@ -85,7 +89,7 @@ export default function AccountTransactionsComponent({
             onClick={handleCreate}
             className="w-full sm:w-auto"
           >
-            Crear transacción
+            {t("Transactions.create")}
           </Button>
         </div>
         {/* <div className="flex-1 max-w-md w-full">
@@ -99,10 +103,14 @@ export default function AccountTransactionsComponent({
 
       {dataTransaction && (
         <CustomDialog
-          title="Editar transacción"
+          title={t("Transactions.form.title")}
           setShowModal={setdataTransaction}
         >
-          <TransactionForm transaction={dataTransaction}  setShowModal={setdataTransaction}/>
+          <TransactionForm
+            transaction={dataTransaction}
+            setShowModal={setdataTransaction}
+            lng={lng}
+          />
         </CustomDialog>
       )}
       {showImportModal && (
@@ -123,13 +131,14 @@ export default function AccountTransactionsComponent({
         <div className="flex flex-col items-center justify-center h-64 bg-muted rounded-lg">
           <FileWarningIcon className="h-12 w-12 text-muted-foreground" />
           <p className="mt-4 text-muted-foreground">
-            No hay transacciones cargadas
+            {t("Transactions.empty")}
           </p>
         </div>
       ) : (
         <TransactionsTable
           setEditingTransaction={setdataTransaction}
           accountTransactions={transactions}
+          lng={lng}
         />
       )}
     </div>
