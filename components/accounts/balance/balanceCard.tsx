@@ -6,41 +6,46 @@
 import { getDictionary } from "@/app/dictionaries";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { Account } from "@/services/types";
+import { BalanceAccount } from "@/services/types";
+import { format } from "date-fns";
 import Link from "next/link";
 
-export default async function AccountCard({ account, lng }: { account: Account, lng: string }) {
+export default async function BalanceCard({
+  accountbalance,
+  lng,
+}: {
+  accountbalance: BalanceAccount;
+  lng: string;
+}) {
   const dict = await getDictionary(lng);
+  const balanceammount = accountbalance.end_ammount
+    ? accountbalance.end_ammount
+    : accountbalance.start_ammount;
   return (
     <Card>
       <CardHeader>
         <div className="flex justify-between items-center">
-          <h2 className="text-lg font-semibold">{account.name}</h2>
+          <h2 className="text-lg font-semibold">
+            {format(accountbalance.start_date ?? "", "PP")}
+          </h2>
           <div className="text-primary font-medium">
-            {account.current_balance.toLocaleString("es-CO", { style: 'currency', currency: 'COP' })}
+            {balanceammount?.toLocaleString("es-CO", {
+              style: "currency",
+              currency: "COP",
+            })}
           </div>
         </div>
       </CardHeader>
       <CardContent>
         <div className="mb-4">
-          <div className="text-muted-foreground">{dict.account.bank}</div>
-          <div className="font-medium">{account.bank?.name}</div>
+          {/* <div className="text-muted-foreground">{dict.account.bank}</div>
+          <div className="font-medium">no se</div> */}
         </div>
         <div className="mt-auto flex flex-col sm:flex-row justify-between items-center gap-2">
           <Link
             className="w-full sm:w-auto"
-            href={`accounts/${account.id}/transactions`}
+            href={`balance/${accountbalance.id}`}
           >
-            <Button variant="outline">{dict.account.view}</Button>
-          </Link>
-          <Link
-            className="w-full sm:w-auto"
-            href={`accounts/${account.id}/balance`}
-          >
-            <Button variant="outline">{dict.account.view_balance}</Button>
-          </Link>
-
-          <Link className="w-full sm:w-auto" href={`accounts/${account.id}`}>
             <Button variant="secondary">{dict.common.edit}</Button>
           </Link>
         </div>

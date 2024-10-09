@@ -54,7 +54,7 @@ const formSchema = z.object({
   name: z.string(),
   account_type_id: z.string(),
   account_number: z.string(),
-  initial_balance: z.number(),
+  // initial_balance: z.number(),
   payment_date: z.date(),
   closing_date: z.date(),
 });
@@ -117,7 +117,7 @@ export default function AccountDetailComponent({
         account_type_id: account.account_type_id,
         closing_date: new Date(),
         payment_date: new Date(),
-        initial_balance: account.initial_balance,
+        // initial_balance: account.initial_balance,
       });
     }
   }, [account]);
@@ -132,8 +132,8 @@ export default function AccountDetailComponent({
       bank_id: values.bank_id,
       closing_date: values.closing_date.toISOString(),
       currency_id: values.currency_id,
-      current_balance: values.initial_balance,
-      initial_balance: values.initial_balance,
+      current_balance: 0,
+      initial_balance: 0,
       name: values.name,
       payment_date: values.payment_date.toISOString(),
     };
@@ -307,28 +307,6 @@ export default function AccountDetailComponent({
                           {...field}
                         />
                       </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="space-y-2">
-                <FormField
-                  control={form.control}
-                  name="initial_balance"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("Account.form.initial_balance")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          id="initial-balance"
-                          type="number"
-                          placeholder={t(
-                            "Account.form.initial_balance_description"
-                          )}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />

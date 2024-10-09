@@ -47,6 +47,16 @@
       "credit": "Entrada"
     }
   },
+  "AccountBalance": {
+    "title": "Balances de la cuenta",
+    "create": "Crea un balance de la cuenta",
+    "form": {
+      "start_ammount": "Monto inicial",
+      "end_ammount": "Monto final",
+      "start_date": "Fecha inicial",
+      "end_date": "Fecha final"
+    }
+  },
   "Categories": {
     "vivienda": "Vivienda",
     "mercado": "Mercado",

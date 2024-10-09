@@ -4,6 +4,7 @@ import type {
 	AccountTransactions,
 	AccountTransactionsForm,
 	AccountTypes,
+	BalanceAccount,
 	Banks,
 	Categories,
 	Currencies,
@@ -195,4 +196,61 @@ export async function getaccountTransactions(
 	}
 	const transactions: AccountTransactions[] = data;
 	return transactions;
+}
+
+export async function getBalanceAccounts(
+	account_id: string,
+): Promise<BalanceAccount[]> {
+	const supabaseServer = createClient();
+
+	const { data, error } = await supabaseServer
+		.from("BalanceAccount")
+		.select("*")
+		.eq("account_id", account_id)
+		.returns<BalanceAccount[]>();
+	if (error) throw error;
+
+	if (!data) {
+		return [];
+	}
+
+	const balanceaccounts: BalanceAccount[] = data;
+	return balanceaccounts;
+}
+
+export async function getAccountBalanceByID(
+	id: string,
+): Promise<BalanceAccount | null> {
+	const supabaseServer = createClient();
+	const { data, error } = await supabaseServer
+		.from("BalanceAccount")
+		.select("*")
+		.eq("id", id)
+		.returns<BalanceAccount[]>();
+	if (error) throw error;
+
+	if (!data) {
+		return null;
+	}
+
+	const balanceaccount: BalanceAccount = data[0];
+	return balanceaccount;
+}
+
+export async function upsertBalanceAccount(
+	balanceaccount: BalanceAccount,
+): Promise<BalanceAccount | null> {
+	const supabaseServer = createClient();
+
+	const { data, error } = await supabaseServer
+		.from("BalanceAccount")
+		.upsert([balanceaccount])
+		.select()
+		.returns<BalanceAccount[]>();
+	if (error) throw error;
+	if (!data) {
+		return null;
+	}
+	const accountResponse: BalanceAccount = data[0];
+	return accountResponse;
 }

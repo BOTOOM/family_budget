@@ -1,8 +1,5 @@
 import AccountComponent from "@/components/accounts/account";
-import AuthButton from "@/components/AuthButton";
 import { getAccounts } from "@/services";
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
 
 export default async function AccountsPage({
   params: { lng },

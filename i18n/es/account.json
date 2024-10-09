@@ -2,5 +2,6 @@
   "view": "Ver Movimientos",
   "add_account": "Añadir cuenta",
   "bank": "Banco",
-  "title": "Mis cuentas bancarias"
+  "title": "Mis cuentas bancarias",
+  "view_balance": "View balance"
 }

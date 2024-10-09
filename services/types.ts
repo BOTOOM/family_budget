@@ -43,7 +43,7 @@ export interface AccountTransactions {
 	transaction_type: string;
 	name: string;
 	categorie?: { name: string; tag: string } | undefined;
-	is_debit: boolean
+	is_debit: boolean;
 }
 
 export interface AccountTransactionsForm
@@ -64,4 +64,15 @@ export interface TransactionCategories {
 	category_id: string | null;
 	id: string;
 	transaction_id: string;
+}
+
+export interface BalanceAccount {
+	account_id: string | null;
+	end_ammount: number | null;
+	end_date: string | null;
+	id?: string | null;
+	is_closed: boolean | null;
+	notes: string | null;
+	start_ammount: number | null;
+	start_date: string | null;
 }

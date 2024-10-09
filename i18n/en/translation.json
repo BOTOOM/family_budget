@@ -47,6 +47,16 @@
       "credit": "Entrada"
     }
   },
+  "AccountBalance": {
+    "title": "Account Balance",
+    "create": "Create Account Balance",
+    "form": {
+      "start_ammount": "Start ammount",
+      "end_ammount": "Final ammount",
+      "start_date": "Start date",
+      "end_date": "Final date"
+    }
+  },
   "Categories": {
     "vivienda": "Housing",
     "mercado": "Groceries",
