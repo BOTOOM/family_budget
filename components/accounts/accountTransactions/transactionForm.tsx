@@ -34,7 +34,10 @@ import { z } from "zod";
 const formSchema = z.object({
   name: z.string(),
   date: z.date(),
-  amount: z.coerce.number().gte(0),
+  amount: z
+    .string()
+    .transform((val) => Number(`${val}`.replace(",", ".")))
+    .pipe(z.number()),
   comment: z.string(),
   transaction_categorie_id: z
     .string({
@@ -42,7 +45,7 @@ const formSchema = z.object({
       invalid_type_error: "Debe seleccionar una categoria",
     })
     .min(10),
-});
+}) satisfies z.ZodSchema<{ amount: number }, z.ZodTypeDef, { amount: string }>;
 
 export default function TransactionForm({
   transaction,
@@ -145,18 +148,22 @@ export default function TransactionForm({
               formControl={form.control}
               description="monto"
               title={t("Transactions.table.ammount")}
-              typeField="number"
+              typeField="text"
               min={0}
             />
           </div>
           <div className="grid gap-1.5">
             <Tabs
               defaultValue={`${isDebit}`}
-              onValueChange={(value) => setIsDebit(value==="true")}
+              onValueChange={(value) => setIsDebit(value === "true")}
             >
               <TabsList>
-                <TabsTrigger value="false">{t("Transactions.form.credit")}</TabsTrigger>
-                <TabsTrigger value="true">{t("Transactions.form.debit")}</TabsTrigger>
+                <TabsTrigger value="false">
+                  {t("Transactions.form.credit")}
+                </TabsTrigger>
+                <TabsTrigger value="true">
+                  {t("Transactions.form.debit")}
+                </TabsTrigger>
               </TabsList>
               {/* <TabsContent value="false">Credito</TabsContent>
               <TabsContent value="true">Debito</TabsContent> */}

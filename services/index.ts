@@ -99,8 +99,23 @@ export async function getAccounts(): Promise<Account[]> {
 	if (!data) {
 		return [];
 	}
+	for (const account of data) {
+		const balanceAcccounts = await getBalanceAccounts(account.id ?? "");
+		if (!balanceAcccounts.length) {
+			continue;
+		}
+		const transactions = await getaccountTransactionsByDate(
+			account.id ?? "",
+			balanceAcccounts[0].start_date ?? "",
+		);
+		account.current_balance = transactions.reduce(
+			(accumulator, currentValue) => accumulator + currentValue.amount,
+			balanceAcccounts[0].start_ammount ?? 0,
+		);
+	}
 
 	const accounts: Account[] = data;
+
 	return accounts;
 }
 
@@ -197,16 +212,44 @@ export async function getaccountTransactions(
 	const transactions: AccountTransactions[] = data;
 	return transactions;
 }
+export async function getaccountTransactionsByDate(
+	account_id: string,
+	start_date: string,
+): Promise<AccountTransactions[]> {
+	const supabaseServer = createClient();
+	const { data, error } = await supabaseServer
+		.from("AccountTransactions")
+		.select(
+			`*, 
+       categorie:transaction_categorie_id (
+       name, tag
+       )`,
+		)
+		.eq("account_id", account_id)
+		.order("date", { ascending: false })
+		.gte("date", start_date)
+		.returns<AccountTransactions[]>();
+	if (error) throw error;
+
+	if (!data) {
+		return [];
+	}
+	const transactions: AccountTransactions[] = data;
+	return transactions;
+}
 
 export async function getBalanceAccounts(
 	account_id: string,
 ): Promise<BalanceAccount[]> {
 	const supabaseServer = createClient();
-
+	if (account_id === "") {
+		throw new Error("accopunt id empty");
+	}
 	const { data, error } = await supabaseServer
 		.from("BalanceAccount")
 		.select("*")
 		.eq("account_id", account_id)
+		.order("start_date", { ascending: false })
 		.returns<BalanceAccount[]>();
 	if (error) throw error;
 
