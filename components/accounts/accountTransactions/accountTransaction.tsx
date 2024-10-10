@@ -12,9 +12,17 @@ import TransactionsTable from "./transactionsTable";
 import CustomDialog from "@/components/common/CustomDialog";
 import TransactionForm from "./transactionForm";
 import { Label } from "@/components/ui/label";
-import { AccountTransactions } from "@/services/types";
+import {
+  AccountTransactions,
+  AccountTransactionsForm,
+  transactionsImport,
+} from "@/services/types";
 import { FileWarningIcon } from "lucide-react";
 import { useTranslation } from "@/i18n/client";
+import { serverlessURL } from "@/utils/supabase/constants";
+import { adjustNumberByDebit } from "@/utils/convertNumber";
+import { useParams } from "next/navigation";
+import { UpsertAccountTransactionAction } from "@/actions";
 
 export default function AccountTransactionsComponent({
   accountTransactions,
@@ -27,6 +35,7 @@ export default function AccountTransactionsComponent({
   const [transactions, setTransactions] = useState<AccountTransactions[]>([]);
   const [dataTransaction, setdataTransaction] = useState<any>(null);
   const [showImportModal, setShowImportModal] = useState(false);
+  const { slug } = useParams<{ slug: string }>();
   useEffect(() => {
     setTransactions(accountTransactions);
     return () => {};
@@ -38,28 +47,58 @@ export default function AccountTransactionsComponent({
   const handleCreate = () => {
     setdataTransaction({});
   };
-  const handleImportSubmit = (importedTransactions) => {
-    setTransactions([...transactions, ...importedTransactions]);
-    setShowImportModal(false);
+  const handleImportSubmit = async (importedTransactions: AccountTransactionsForm[]) => {
+    const response = await UpsertAccountTransactionAction(importedTransactions);
+    if (response && response[0]?.id) {
+      setShowImportModal(false);
+    }
   };
 
   const [file, setFile] = useState(null);
-  const handleFileChange = (e) => {
+  const handleFileChange = (e: any) => {
+    console.log("HOLAAA");
+    console.log(e.target.files[0]);
     setFile(e.target.files[0]);
   };
-  const handleImportFileSubmit = () => {
-    if (file) {
-      const importedTransactions = [
-        {
-          id: transactions.length + 1,
-          date: "2023-05-01",
-          merchant: "Tienda de Ropa",
-          category: "Shopping",
-          author: "Jane Doe",
-          notes: "Compra de ropa de verano",
-        },
-      ];
-      handleImportSubmit(importedTransactions);
+  const handleImportFileSubmit = async () => {
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("file", file);
+    console.log(formData);
+    try {
+      const response = await fetch(`${serverlessURL}/readTransactions`, {
+        method: "POST",
+        body: formData,
+      });
+      console.log(response);
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      console.log("antes", response.ok);
+      console.log("Response status:", response.status);
+      console.log("Response body used:", response.bodyUsed);
+      const result: transactionsImport[] = (await response.json()).data;
+      console.log("Success:", result);
+      const transactions: AccountTransactionsForm[]  = result.map((item) => {
+        const isDebit = !!item.Debitos;
+        return {
+          account_id: slug,
+          amount: adjustNumberByDebit(
+            isDebit,
+            isDebit ? item.Debitos : item.Creditos
+          ),
+          comment: item.Descripcion,
+          date: new Date(item.Fecha).toISOString(),
+          transaction_categorie_id: null,
+          name: item.Descripcion,
+          is_debit: isDebit,
+        };
+      });
+      console.log("transformado:", transactions);
+      await handleImportSubmit(transactions)
+    } catch (error) {
+      console.error("Error uploading file:", error);
     }
   };
   const handleGoBack = () => {
@@ -121,7 +160,12 @@ export default function AccountTransactionsComponent({
           <div className="grid gap-4">
             <div className="grid gap-1.5">
               <Label htmlFor="file">Archivo</Label>
-              <Input type="file" id="file" onChange={handleFileChange} />
+              <Input
+                type="file"
+                id="file"
+                accept=".csv, .xlsx"
+                onChange={handleFileChange}
+              />
             </div>
             <Button onClick={handleImportFileSubmit}>Importar</Button>
           </div>

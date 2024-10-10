@@ -32,10 +32,10 @@ export async function GetCategoriesAction(): Promise<Categories[]> {
 }
 
 export async function UpsertAccountTransactionAction(
-	transaction: AccountTransactionsForm,
+	transactions: AccountTransactionsForm[],
 ) {
-	console.log("llegamos", transaction);
-	const result = await upsertTransaction(transaction);
+	console.log("llegamos", transactions);
+	const result = await upsertTransaction(transactions);
 	console.log("UpsertAccountTransactionAction", result);
 	return result;
 	// if (account.id) {

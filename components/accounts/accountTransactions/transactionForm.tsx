@@ -24,6 +24,7 @@ import {
   AccountTransactionsForm,
   Categories,
 } from "@/services/types";
+import { adjustNumberByDebit } from "@/utils/convertNumber";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams } from "next/navigation";
@@ -34,10 +35,7 @@ import { z } from "zod";
 const formSchema = z.object({
   name: z.string(),
   date: z.date(),
-  amount: z
-    .string()
-    .transform((val) => Number(`${val}`.replace(",", ".")))
-    .pipe(z.number()),
+  amount: z.string(),
   comment: z.string(),
   transaction_categorie_id: z
     .string({
@@ -45,7 +43,7 @@ const formSchema = z.object({
       invalid_type_error: "Debe seleccionar una categoria",
     })
     .min(10),
-}) satisfies z.ZodSchema<{ amount: number }, z.ZodTypeDef, { amount: string }>;
+});
 
 export default function TransactionForm({
   transaction,
@@ -75,13 +73,13 @@ export default function TransactionForm({
       let transactionTemp = {
         name: "",
         date: new Date(),
-        amount: 0,
+        amount: "0",
         comment: "",
         transaction_categorie_id: "",
       };
       if (transaction.id) {
         transactionTemp = {
-          amount: adjustNumber(false, transaction.amount),
+          amount: `${adjustNumberByDebit(false, transaction.amount)}`,
           comment: transaction.comment ?? "",
           date: new Date(transaction.date),
           name: transaction.name,
@@ -92,14 +90,11 @@ export default function TransactionForm({
       return transactionTemp;
     }, []),
   });
-  function adjustNumber(is_debit: boolean, number: number) {
-    return is_debit ? -Math.abs(number) : Math.abs(number);
-  }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const transactionData: AccountTransactionsForm = {
       account_id: params.slug,
-      amount: adjustNumber(isDebit, values.amount),
+      amount: adjustNumberByDebit(isDebit, Number(values.amount)),
       comment: values.comment,
       date: values.date.toISOString(),
       transaction_categorie_id: values.transaction_categorie_id,
@@ -111,8 +106,8 @@ export default function TransactionForm({
     if (transaction.id) {
       transactionData.id = transaction.id;
     }
-    const response = await UpsertAccountTransactionAction(transactionData);
-    if (response?.id) {
+    const response = await UpsertAccountTransactionAction([transactionData]);
+    if (response && response[0]?.id) {
       setShowModal(false);
     }
   }

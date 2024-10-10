@@ -154,8 +154,8 @@ export async function getCategories(): Promise<Categories[]> {
 }
 
 export async function upsertTransaction(
-	transactionData: Partial<AccountTransactionsForm>,
-): Promise<AccountTransactions | null> {
+	transactionsData: Partial<AccountTransactionsForm>[],
+): Promise<AccountTransactions[] | null> {
 	const supabaseServer = createClient();
 	const {
 		data: { user },
@@ -168,15 +168,20 @@ export async function upsertTransaction(
 		return null;
 	}
 	const user_id = user?.id;
-	const transaction: Partial<AccountTransactions> = {
-		...transactionData,
+	const transactions = transactionsData.map((transaction)=> ({
+		...transaction,
 		author_id: user_id ?? "",
 		transaction_type: "",
-	};
+	}))
+	// const transaction: Partial<AccountTransactions> = {
+	// 	...transactionData,
+	// 	author_id: user_id ?? "",
+	// 	transaction_type: "",
+	// };
 
 	const { data, error } = await supabaseServer
 		.from("AccountTransactions")
-		.upsert([transaction])
+		.upsert(transactions)
 		.select()
 		.returns<AccountTransactions[]>();
 	console.log({ data, error });
@@ -184,7 +189,7 @@ export async function upsertTransaction(
 	if (!data) {
 		return null;
 	}
-	const accountResponse: AccountTransactions = data[0];
+	const accountResponse: AccountTransactions[] = data;
 	return accountResponse;
 }
 
@@ -202,7 +207,7 @@ export async function getaccountTransactions(
 		)
 		.eq("account_id", account_id)
 		.order("date", { ascending: false })
-		.range(0, 9)
+		// .range(0, 9)
 		.returns<AccountTransactions[]>();
 	if (error) throw error;
 

@@ -28,7 +28,7 @@ export default function TransactionsTable({
   lng: string;
 }) {
   const { t } = useTranslation(lng);
-  console.log("llegaron", accountTransactions);
+  // console.log("llegaron", accountTransactions);
   const handleEdit = (transaction: AccountTransactions) => {
     setEditingTransaction(transaction);
   };
