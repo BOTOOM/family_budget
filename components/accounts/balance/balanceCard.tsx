@@ -26,7 +26,7 @@ export default async function BalanceCard({
       <CardHeader>
         <div className="flex justify-between items-center">
           <h2 className="text-lg font-semibold">
-            {format(accountbalance.start_date ?? "", "PP")}
+            {format(accountbalance.start_date ?? "", "MMM yyyy")}
           </h2>
           <div className="text-primary font-medium">
             {balanceammount?.toLocaleString("es-CO", {

@@ -30,6 +30,12 @@ export interface Account {
   name: string;
   payment_date: string | null;
   user_id?: string;
+  dataChart: balanceChart[];
+}
+
+export interface balanceChart {
+  date: Date;
+  amount: number;
 }
 
 export interface AccountTransactions {

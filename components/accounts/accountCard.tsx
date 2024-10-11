@@ -8,8 +8,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Account } from "@/services/types";
 import Link from "next/link";
+import { BalanceGraph } from "./balanceGraph";
 
-export default async function AccountCard({ account, lng }: { account: Account, lng: string }) {
+export default async function AccountCard({
+  account,
+  lng,
+}: {
+  account: Account;
+  lng: string;
+}) {
   const dict = await getDictionary(lng);
   return (
     <Card>
@@ -17,7 +24,10 @@ export default async function AccountCard({ account, lng }: { account: Account, 
         <div className="flex justify-between items-center">
           <h2 className="text-lg font-semibold">{account.name}</h2>
           <div className="text-primary font-medium">
-            {account.current_balance.toLocaleString("es-CO", { style: 'currency', currency: 'COP' })}
+            {account.current_balance.toLocaleString("es-CO", {
+              style: "currency",
+              currency: "COP",
+            })}
           </div>
         </div>
       </CardHeader>
@@ -44,6 +54,17 @@ export default async function AccountCard({ account, lng }: { account: Account, 
             <Button variant="secondary">{dict.common.edit}</Button>
           </Link>
         </div>
+        {account.dataChart.length !== 0 ? (
+          <div className="mt-4">
+            <div className="aspect-[4/3]">
+              <BalanceGraph
+                lng={lng}
+                data={account.dataChart}
+                startAmount={account.initial_balance}
+              />
+            </div>
+          </div>
+        ) : null}
       </CardContent>
     </Card>
   );
